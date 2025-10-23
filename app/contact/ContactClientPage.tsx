@@ -20,22 +20,25 @@ export default function ContactClientPage() {
     const data = Object.fromEntries(new FormData(form) as any)
     setLoading(true)
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-      if (res.ok) {
-        setSent(true)
-        form.reset()
-      }
+      // ✅ Send form data to WhatsApp instead of API
+      const message = `New Contact Message:
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone || "N/A"}
+Message: ${data.message || "N/A"}`
+      const encoded = encodeURIComponent(message)
+      const whatsappUrl = `https://wa.me/971509087548?text=${encoded}`
+      window.open(whatsappUrl, "_blank")
+
+      setSent(true)
+      form.reset()
     } finally {
       setLoading(false)
     }
   }
 
-  // ===== SEO constants (added) =====
-  const siteUrl = "https://secretof-elegance.vercel.app"
+  // ===== SEO constants =====
+  const siteUrl = "https://asrarsalon.com"
   const pageUrl = `${siteUrl}/contact`
   const brand = "Secrets of Elegance"
   const phoneRaw = "+971509087548"
@@ -46,37 +49,14 @@ export default function ContactClientPage() {
     "https://www.facebook.com/share/1CbXYvhG9B/",
     "https://www.tiktok.com/@aserar54?_t=ZS-90XvFOM4TP6&_r=1",
   ]
-  const ogImage =
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-10-14%20at%208.34.33%20PM-HKQgcVSFjHcUyxm4SbKPSQXsWBBWQh.jpeg"
+  // Prefer an asset on your own domain for better trust/snippet stability
+  const ogImage = "https://asrarsalon.com/og-image.png"
   const mapEmbed =
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.285540526624!2d55.43219557526517!3d25.39141397758609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f592de45d4ded%3A0x1f749e11e5631f9b!2sAida%20Tower%20-%20Ajman!5e0!3m2!1sen!2sae!4v1728970022874!5m2!1sen!2sae"
 
-  // ✅ Structured Data (kept) — your original block
+  // ===== Structured Data =====
+  // Primary business entity (kept, enriched)
   const schema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "Secrets of Elegance",
-    url: "https://secretof-elegance.vercel.app/contact",
-    telephone: "+971509087548",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Aida Tower, Ajman",
-      addressLocality: "Ajman",
-      addressRegion: "Ajman",
-      postalCode: "",
-      addressCountry: "AE",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 25.39141397758609,
-      longitude: 55.43219557526517,
-    },
-    openingHours: "Mo-Su 10:00-22:00",
-    contactType: "customer service",
-  }
-
-  // ✅ Additional JSON-LD (added; non-breaking)
-  const orgSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": `${siteUrl}#business`,
@@ -84,7 +64,6 @@ export default function ContactClientPage() {
     url: siteUrl,
     image: ogImage,
     telephone: phoneRaw,
-    priceRange: "$$",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Aida Tower, Ajman",
@@ -93,46 +72,67 @@ export default function ContactClientPage() {
       postalCode: "00000",
       addressCountry: "AE",
     },
-    geo: { "@type": "GeoCoordinates", latitude: 25.391414, longitude: 55.432196 },
-    sameAs: socials,
-    hasMap: mapEmbed,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 25.391414,
+      longitude: 55.432196,
+    },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday",
-        ],
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
         opens: "10:00",
         closes: "22:00",
       },
     ],
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: phoneRaw,
-      contactType: "customer service",
-      areaServed: "AE",
-      availableLanguage: ["en", "ar"],
-    },
+    sameAs: socials,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: phoneRaw,
+        contactType: "customer service",
+        areaServed: "AE",
+        availableLanguage: ["en", "ar"],
+      },
+    ],
   }
 
+  // Organization (kept for clarity if Google chooses Org vs LocalBusiness)
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteUrl}#organization`,
+    name: brand,
+    url: siteUrl,
+    logo: ogImage,
+    sameAs: socials,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: phoneRaw,
+        contactType: "customer service",
+        areaServed: "AE",
+        availableLanguage: ["en", "ar"],
+      },
+    ],
+  }
+
+  // Breadcrumb
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
       { "@type": "ListItem", position: 2, name: "Contact", item: pageUrl },
     ],
   }
 
+  // Website
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${siteUrl}#website`,
     url: siteUrl,
     name: brand,
     potentialAction: {
@@ -142,47 +142,70 @@ export default function ContactClientPage() {
     },
   }
 
+  // Contact page (WebPage)
+  const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": ["WebPage", "ContactPage"],
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: "Contact Secrets of Elegance | Ajman Beauty Salon",
+    description:
+      "Contact Secrets of Elegance in Ajman for manicure, pedicure, waxing, facials, threading, and hair care. Book via WhatsApp or contact form.",
+    primaryImageOfPage: ogImage,
+    isPartOf: { "@id": `${siteUrl}#website` },
+    breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+  }
+
   return (
     <>
       {/* ✅ SEO Meta Tags */}
       <Head>
+        {/* Core */}
         <title>Contact Secrets of Elegance | Ajman Beauty Salon</title>
         <meta
           name="description"
           content="Contact Secrets of Elegance in Ajman for manicure, pedicure, waxing, facials, threading, and hair care. Call or WhatsApp +971509087548 to book your appointment today."
         />
+        {/* Expanded long-tail & local keywords */}
         <meta
           name="keywords"
-          content="Ajman beauty salon, contact Secrets of Elegance, manicure Ajman, pedicure Ajman, waxing Ajman, facials Ajman, threading Ajman, hair care Ajman, ladies salon Ajman, spa Ajman"
+          content="Contact salon Ajman, Contact Secrets of Elegance, Ajman beauty salon contact, WhatsApp salon Ajman, Book manicure Ajman, Book pedicure Ajman, Waxing Ajman booking, Facial Ajman booking, Threading Ajman contact, Hair salon Ajman, Ladies salon Ajman, Best salon Ajman, Salon near me Ajman"
         />
         <meta name="author" content="Secrets of Elegance Ajman" />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <meta name="googlebot" content="index, follow, max-image-preview:large" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta httpEquiv="Content-Language" content="en-AE" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="application-name" content="Secrets of Elegance" />
         <link rel="canonical" href={pageUrl} />
 
-        {/* Local/geo */}
+        {/* Robots */}
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="googlebot" content="index, follow, max-image-preview:large" />
+
+        {/* Local signals */}
         <meta name="geo.region" content="AE-AJ" />
         <meta name="geo.placename" content="Ajman" />
         <meta name="ICBM" content="25.391414, 55.432196" />
         <meta name="format-detection" content="telephone=no" />
 
-        {/* ✅ Open Graph */}
+        {/* Open Graph */}
         <meta property="og:title" content="Contact Secrets of Elegance | Ajman Beauty Salon" />
         <meta
           property="og:description"
           content="Reach Secrets of Elegance in Ajman for luxury beauty services including manicure, pedicure, waxing, facials, threading, and hair care. WhatsApp +971509087548."
         />
         <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Secrets of Elegance" />
         <meta property="og:locale" content="en_AE" />
-        {/* Associate social profiles */}
         <meta property="og:see_also" content={socials[1]} />
         <meta property="og:see_also" content={socials[2]} />
         <meta property="og:see_also" content={socials[3]} />
 
-        {/* ✅ Twitter Card */}
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Contact Secrets of Elegance | Ajman Beauty Salon" />
         <meta
@@ -190,6 +213,7 @@ export default function ContactClientPage() {
           content="Get in touch with Secrets of Elegance in Ajman for luxury beauty treatments. WhatsApp +971509087548."
         />
         <meta name="twitter:image" content={ogImage} />
+        <meta name="twitter:image:alt" content="Secrets of Elegance — Ajman Beauty Salon" />
 
         {/* Hreflang */}
         <link rel="alternate" hrefLang="en-AE" href={pageUrl} />
@@ -200,6 +224,10 @@ export default function ContactClientPage() {
         <link rel="me" href={socials[1]} />
         <link rel="me" href={socials[2]} />
         <link rel="me" href={socials[3]} />
+
+        {/* Small perf wins for WhatsApp click */}
+        <link rel="dns-prefetch" href="//wa.me" />
+        <link rel="preconnect" href="https://wa.me" crossOrigin="" />
       </Head>
 
       <section className="container mx-auto px-4 py-10 grid gap-8 md:grid-cols-2">
@@ -218,7 +246,6 @@ export default function ContactClientPage() {
           </form>
         </div>
 
-        {/* Map Section */}
         <div className="space-y-3">
           <h2 className="text-xl font-medium">{t("map.title")}</h2>
           <div className="aspect-video rounded-xl overflow-hidden border">
@@ -238,11 +265,12 @@ export default function ContactClientPage() {
         </div>
       </section>
 
-      {/* JSON-LD: original + added */}
+      {/* Structured Data */}
       <JsonLd data={schema} />
       <JsonLd data={orgSchema} />
       <JsonLd data={breadcrumb} />
       <JsonLd data={websiteSchema} />
+      <JsonLd data={contactPageSchema} />
     </>
   )
 }

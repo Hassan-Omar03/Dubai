@@ -78,7 +78,7 @@ export function SiteHeader() {
           <div className="flex items-center gap-1 xs:gap-2">
             {/* Socials: compact on xs, full on sm+ */}
             <div className="flex items-center gap-1 xs:gap-2">
-              {/* Show only Instagram on very small screens to save space */}
+              {/* Instagram always visible */}
               <a
                 href="https://www.instagram.com/aserar54?igsh=MWluMWRmbjBvaGdiaw=="
                 target="_blank"
@@ -89,7 +89,7 @@ export function SiteHeader() {
                 <Instagram className="h-4 w-4" />
               </a>
 
-              {/* Reveal Facebook + TikTok from sm and up */}
+              {/* Facebook + TikTok from sm and up */}
               <a
                 href="https://www.facebook.com/share/1CbXYvhG9B/"
                 target="_blank"
@@ -157,8 +157,13 @@ export function SiteHeader() {
                 </Link>
               ))}
 
+              {/* 🔤 Language Switcher inside mobile menu */}
+              <div className="pt-3">
+                <LanguageSwitcher />
+              </div>
+
               {/* Socials inside mobile menu (for users who expect them here) */}
-              <div className="pt-2 flex items-center gap-3">
+              <div className="pt-3 flex items-center gap-3">
                 <a
                   href="https://www.instagram.com/aserar54?igsh=MWluMWRmbjBvaGdiaw=="
                   target="_blank"

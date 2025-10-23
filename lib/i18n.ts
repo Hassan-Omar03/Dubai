@@ -89,10 +89,7 @@ export const dictionary = {
         name: "Hair Wash",
         desc: "Refreshing shampoo and conditioning treatment with relaxing scalp massage.",
       },
-      backwaxing: {
-        name: "Back Waxing",
-        desc: "Say goodbye to unwanted back hair and hello to smooth, confident skin. Our back waxing service removes hair from the shoulders to the lower back using premium wax that’s gentle on the skin yet tough on hair.",
-      },
+     
       makeup: {
         name: "Professional Makeup",
         desc: "Flawless makeup application for any occasion, from natural to glamorous looks.",
@@ -147,7 +144,7 @@ export const dictionary = {
       address: "Address",
       phone: "Phone",
       email: "Email",
-      openHours: "Daily 10:00 – 20:00",
+      openHours: "Daily 11:00 AM – 11:00 PM",
       ctaTitle: "Ready to glow?",
       ctaSubtitle: "Book your pampering session today.",
       ctaButton: "Book on WhatsApp",

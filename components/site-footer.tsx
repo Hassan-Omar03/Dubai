@@ -122,7 +122,7 @@ export function SiteFooter() {
             <p className="text-gray-600">{t("footer.openHours")}</p>
             <p className="font-semibold mt-6 mb-3">{t("footer.follow")}</p>
             <ul className="space-y-2">
-              <li>
+              {/* <li>
                 <a
                   href="https://wa.me/971509087548"
                   target="_blank"
@@ -131,7 +131,7 @@ export function SiteFooter() {
                 >
                   <MessageCircle className="h-4 w-4 text-pink-600" /> WhatsApp
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a
                   href="https://www.instagram.com/aserar54?igsh=MWluMWRmbjBvaGdiaw=="

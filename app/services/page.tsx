@@ -1,26 +1,26 @@
 import ServicesPageClient from "./services-client"
 import Head from "next/head"
 import { JsonLd } from "../../components/json-ld"
+import { MotionConfig, domAnimation, LazyMotion } from "framer-motion"
 
 export const metadata = {
   title: "Services | Secrets of Elegance",
   description:
     "Discover our premium beauty services in Ajman — manicure, pedicure, waxing, facials, threading, hair care, and more at Secrets of Elegance.",
-  // Extra metadata (kept here so App Router can pick them up too)
   openGraph: {
     title: "Services | Secrets of Elegance Ajman",
     description:
       "Discover Secrets of Elegance's beauty services in Ajman — manicure, pedicure, waxing, facials, threading, and hair care. Contact +971509087548.",
-    url: "https://secretof-elegance.vercel.app/services",
+    url: "https://asrarsalon.com/services",
     siteName: "Secrets of Elegance",
     type: "website",
     locale: "en_AE",
     images: [
       {
-        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-10-14%20at%208.34.33%20PM-HKQgcVSFjHcUyxm4SbKPSQXsWBBWQh.jpeg",
+        url: "https://asrarsalon.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Secrets of Elegance — Beauty Salon in Ajman",
+        alt: "Secrets of Elegance — Beauty Salon Services in Ajman",
       },
     ],
   },
@@ -29,35 +29,32 @@ export const metadata = {
     title: "Services | Secrets of Elegance Ajman",
     description:
       "Explore our beauty services in Ajman — manicure, pedicure, waxing, facials, threading, and hair care. WhatsApp +971509087548.",
-    images: [
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-10-14%20at%208.34.33%20PM-HKQgcVSFjHcUyxm4SbKPSQXsWBBWQh.jpeg",
-    ],
+    images: ["https://asrarsalon.com/og-image.png"],
   },
   alternates: {
-    canonical: "https://secretof-elegance.vercel.app/services",
+    canonical: "https://asrarsalon.com/services",
     languages: {
-      "en-AE": "https://secretof-elegance.vercel.app/services",
-      // add more locales when you add translations
+      "en-AE": "https://asrarsalon.com/services",
     },
   },
   robots: {
     index: true,
     follow: true,
     "max-image-preview": "large",
-    "max-snippet": -1,
-    "max-video-preview": -1,
+    "max-snippet": 80,
+    "max-video-preview": 20,
     googleBot: {
       index: true,
       follow: true,
       "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+      "max-snippet": 80,
+      "max-video-preview": 20,
     },
   },
 }
 
 export default function ServicesPage() {
-  const siteUrl = "https://secretof-elegance.vercel.app"
+  const siteUrl = "https://asrarsalon.com"
   const pageUrl = `${siteUrl}/services`
   const brand = "Secrets of Elegance"
   const phone = "+971509087548"
@@ -70,15 +67,27 @@ export default function ServicesPage() {
     "https://www.tiktok.com/@aserar54?_t=ZS-90XvFOM4TP6&_r=1",
   ]
 
-  const ogImage =
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-10-14%20at%208.34.33%20PM-HKQgcVSFjHcUyxm4SbKPSQXsWBBWQh.jpeg"
+  const ogImage = "https://asrarsalon.com/og-image.png"
 
   // Main Service schema
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${pageUrl}#service`,
     name: "Secrets of Elegance Services",
     url: pageUrl,
+    image: ogImage,
+    areaServed: { "@type": "City", name: "Ajman" },
+    serviceType: [
+      "Manicure",
+      "Pedicure",
+      "Waxing",
+      "Facial Cleaning",
+      "Threading",
+      "Hair Care",
+      "Nail Art",
+      "Beauty Treatments",
+    ],
     provider: {
       "@type": "LocalBusiness",
       "@id": `${siteUrl}#business`,
@@ -94,25 +103,13 @@ export default function ServicesPage() {
         postalCode: "00000",
         addressCountry: "AE",
       },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: 25.391414,
-        longitude: 55.432196,
-      },
+      geo: { "@type": "GeoCoordinates", latitude: 25.391414, longitude: 55.432196 },
       sameAs: social,
       hasMap: mapEmbed,
       openingHoursSpecification: [
         {
           "@type": "OpeningHoursSpecification",
-          dayOfWeek: [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-          ],
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
           opens: "10:00",
           closes: "22:00",
         },
@@ -125,21 +122,15 @@ export default function ServicesPage() {
         availableLanguage: ["en", "ar"],
       },
     },
-    serviceType: [
-      "Manicure",
-      "Pedicure",
-      "Waxing",
-      "Facial Cleaning",
-      "Threading",
-      "Hair Care",
-      "Nail Art",
-      "Beauty Treatments",
-    ],
-    areaServed: { "@type": "City", name: "Ajman" },
-    image: ogImage,
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStoreOnly",
+      priceCurrency: "AED",
+      url: pageUrl,
+    },
   }
 
-  // Additional SEO schemas
+  // Organization / Local business
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -158,28 +149,22 @@ export default function ServicesPage() {
     },
   }
 
+  // Breadcrumbs
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: siteUrl,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Services",
-        item: pageUrl,
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Services", item: pageUrl },
     ],
   }
 
+  // Website
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${siteUrl}#website`,
     url: siteUrl,
     name: brand,
     potentialAction: {
@@ -189,10 +174,11 @@ export default function ServicesPage() {
     },
   }
 
-  // New: WebPage schema for the Services page itself
+  // WebPage
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
     name: "Services | Secrets of Elegance",
     url: pageUrl,
     primaryImageOfPage: ogImage,
@@ -202,7 +188,7 @@ export default function ServicesPage() {
     isPartOf: { "@id": `${siteUrl}#website` },
   }
 
-  // New: FAQ schema (helps with rich results)
+  // FAQ
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -248,19 +234,32 @@ export default function ServicesPage() {
   return (
     <>
       <Head>
+        {/* Core */}
         <title>Services | Secrets of Elegance Ajman</title>
         <meta
           name="description"
           content="Explore Secrets of Elegance's beauty services in Ajman including manicure, pedicure, waxing, facials, threading, hair care, and more. Call or WhatsApp +971509087548 to book."
         />
+        {/* Expanded, locality + long-tail keywords */}
         <meta
           name="keywords"
-          content="Ajman beauty services, manicure Ajman, pedicure Ajman, waxing Ajman, facials Ajman, threading Ajman, hair care Ajman, nail art Ajman, beauty treatments Ajman"
+          content="Beauty services Ajman, Ladies salon services Ajman, Manicure Ajman, Pedicure Ajman, Gel nails Ajman, Acrylic nails Ajman, Nail art Ajman, Waxing Ajman, Full body waxing Ajman, Facial cleaning Ajman, Deep cleansing facial Ajman, Threading Ajman, Eyebrow threading Ajman, Hair care Ajman, Hair color Ajman, Keratin treatment Ajman, Bridal makeup Ajman, Mehndi Ajman, Henna Ajman, Spa Ajman, Massage Ajman, Best salon Ajman, Salon near me Ajman"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta httpEquiv="Content-Language" content="en-AE" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="application-name" content="Secrets of Elegance" />
+        <link rel="canonical" href={pageUrl} />
+
+        {/* Robots */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow, max-image-preview:large" />
-        <meta name="theme-color" content="#ffffff" />
-        <link rel="canonical" href={pageUrl} />
+
+        {/* Local signals */}
+        <meta name="geo.region" content="AE-AJ" />
+        <meta name="geo.placename" content="Ajman" />
+        <meta name="ICBM" content="25.391414, 55.432196" />
+        <meta name="format-detection" content="telephone=no" />
 
         {/* Open Graph */}
         <meta property="og:title" content="Services | Secrets of Elegance Ajman" />
@@ -269,11 +268,12 @@ export default function ServicesPage() {
           content="Discover Secrets of Elegance's beauty services in Ajman — manicure, pedicure, waxing, facials, threading, and hair care. Contact +971509087548."
         />
         <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Secrets of Elegance" />
         <meta property="og:locale" content="en_AE" />
-        {/* see_also to associate social profiles */}
         <meta property="og:see_also" content={social[0]} />
         <meta property="og:see_also" content={social[1]} />
         <meta property="og:see_also" content={social[2]} />
@@ -288,13 +288,7 @@ export default function ServicesPage() {
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content="Secrets of Elegance — Beauty Salon in Ajman" />
 
-        {/* Local relevance & contact */}
-        <meta name="geo.region" content="AE-AJ" />
-        <meta name="geo.placename" content="Ajman" />
-        <meta name="ICBM" content="25.391414, 55.432196" />
-        <meta name="format-detection" content="telephone=no" />
-
-        {/* Hreflang (extend when you add languages) */}
+        {/* Hreflang */}
         <link rel="alternate" hrefLang="en-AE" href={pageUrl} />
         <link rel="alternate" hrefLang="x-default" href={pageUrl} />
 
@@ -302,17 +296,26 @@ export default function ServicesPage() {
         <link rel="me" href={social[0]} />
         <link rel="me" href={social[1]} />
         <link rel="me" href={social[2]} />
+
+        {/* Small perf wins for external clicks (optional) */}
+        <link rel="dns-prefetch" href="//wa.me" />
+        <link rel="preconnect" href="https://wa.me" crossOrigin="" />
       </Head>
 
       {/* Structured Data */}
       <JsonLd data={schema} />
-      <JsonLd data={{ ...orgSchema, "@id": `${siteUrl}#business` }} />
-      <JsonLd data={{ ...breadcrumb, "@id": `${pageUrl}#breadcrumb` }} />
-      <JsonLd data={{ ...websiteSchema, "@id": `${siteUrl}#website` }} />
+      <JsonLd data={orgSchema} />
+      <JsonLd data={breadcrumb} />
+      <JsonLd data={websiteSchema} />
       <JsonLd data={webPageSchema} />
       <JsonLd data={faqSchema} />
 
-      <ServicesPageClient />
+      {/* Faster, lighter animations site-wide for this page */}
+      <LazyMotion features={domAnimation}>
+        <MotionConfig transition={{ duration: 0.25, ease: "easeOut" }} reducedMotion="user">
+          <ServicesPageClient />
+        </MotionConfig>
+      </LazyMotion>
     </>
   )
 }

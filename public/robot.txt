@@ -1,0 +1,6 @@
+# robots.txt for Secrets of Elegance Salon
+
+User-agent: *
+Allow: /
+
+Sitemap: https://asrarsalon.com/sitemap.xml

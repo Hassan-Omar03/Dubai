@@ -19,7 +19,7 @@ export const services = [
   { id: "leg-wax", imageUrl: "/leg-waxing.jpg" },
   { id: "underarm", imageUrl: "/underarm-wax.jpg" },
   { id: "spa-massage", imageUrl: "/spa-massage.png" },
-  {id:"back waxing", imageUrl:"/back-waxing.jpg"},
+  
 ]
 
 export const SERVICES = services

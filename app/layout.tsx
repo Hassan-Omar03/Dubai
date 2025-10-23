@@ -9,7 +9,7 @@ import { SiteHeader } from "../components/site-header"
 import { SiteFooter } from "../components/site-footer"
 import { Suspense } from "react"
 
-const SITE_URL = "https://secretof-elegance.vercel.app"
+const SITE_URL = "https://asrarsalon.com"
 const BRAND = "Secrets of Elegance"
 const PHONE = "+971509087548"
 const OG_IMAGE =
